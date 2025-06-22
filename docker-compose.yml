@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    restart: always
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: always
+
+  api:
+    build: ./api
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/jobs
+      - RABBIT_URL=amqp://rabbitmq
+    depends_on:
+      - mongo
+      - rabbitmq
+
+  worker:
+    build: ./worker
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/jobs
+      - RABBIT_URL=amqp://rabbitmq
+      - VENDOR_MOCK_URL=http://vendor-mocks:4000
+    depends_on:
+      - mongo
+      - rabbitmq
+      - vendor-mocks
+
+  vendor-mocks:
+    build: ./vendor-mocks
+    ports:
+      - "4000:4000"
+    restart: always
