@@ -15,8 +15,8 @@ A backend system that unifies access to multiple external data vendors (sync & a
 **1. Clone the repository:**
 
 ```sh
-git clone <your-repo-url>
-cd multi-vendor-assignment
+git clone <repo-url>
+cd multi-vendor-service
 ```
 
 **2. Start all services:**
